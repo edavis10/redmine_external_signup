@@ -25,4 +25,11 @@ Redmine::Plugin.register :redmine_external_signup do
   version '0.1.0'
 
   requires_redmine :version_or_higher => '0.8.0'
+
+  settings({
+             :partial => 'settings/external_signup',
+             :default => {
+               'roles' => []
+             }})
+
 end

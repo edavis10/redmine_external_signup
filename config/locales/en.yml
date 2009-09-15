@@ -1,3 +1,5 @@
-# English strings go here for Rails i18n
 en:
-  my_label: "My label"
+  external_signup_text_settings: "Configuration"
+  external_signup_settings_help: "When a new user is created from the external source, they will get the following settings:"
+  external_signup_missing_roles: "Missing Roles.  Please create at least one first."
+
