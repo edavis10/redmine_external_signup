@@ -8,7 +8,7 @@ External signup is a Redmine plugin that allows an external source create a new 
 
 == Getting the plugin
 
-A copy of the plugin can be downloaded from {Little Stream Software}[https://projects.littlestreamsoftware.com/projects/___XXX___/files] or from {GitHub}[http://github.com/edavis10/___XXX___]
+A copy of the plugin can be downloaded from {Little Stream Software}[https://projects.littlestreamsoftware.com/projects/external-signup/files] or from {GitHub}[http://github.com/edavis10/redmine_external_signup]
 
 
 == Installation and Setup
