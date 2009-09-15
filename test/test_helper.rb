@@ -35,4 +35,15 @@ end
 
 # Shoulda
 class Test::Unit::TestCase
+  def self.should_respond_with_with_a_method_not_allowed(options={})
+    use_method_instead = options.delete(:use_method_instead) || "POST"
+
+    context "with an invalid HTTP method" do
+      should_respond_with 405
+
+      should "return an XML document saying to use #{use_method_instead}" do
+        assert_select 'errors error', /#{use_method_instead}/
+      end
+    end
+  end
 end

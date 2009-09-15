@@ -8,15 +8,8 @@ class ExternalSignupsControllerTest < ActionController::TestCase
 
   context "#create" do
     context "GET" do
-      setup do
-        get :create
-      end
-      
-      should_respond_with 405
-
-      should "return an XML document saying to use POST" do
-        assert_select 'errors error', /POST/
-      end
+      setup { get :create }
+      should_respond_with_with_a_method_not_allowed(:use_method_instead => "POST")
     end
 
     context "POST" do
@@ -38,27 +31,13 @@ class ExternalSignupsControllerTest < ActionController::TestCase
     end
 
     context "PUT" do
-      setup do
-        put :create
-      end
-
-      should_respond_with 405
-
-      should "return an XML document saying to use POST" do
-        assert_select 'errors error', /POST/
-      end
+      setup { put :create }
+      should_respond_with_with_a_method_not_allowed(:use_method_instead => "POST")
     end
 
     context "DELETE" do
-      setup do
-        delete :create
-      end
-
-      should_respond_with 405
-
-      should "return an XML document saying to use POST" do
-        assert_select 'errors error', /POST/
-      end
+      setup { delete :create }
+      should_respond_with_with_a_method_not_allowed(:use_method_instead => "POST")
     end
   end
 
