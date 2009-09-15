@@ -1,6 +1,10 @@
 class ExternalSignupsController < ApplicationController
-  verify :method => :post, :only => :create, :redirect_to => { :action => :invalid_method }
   def create
+    if request.post?
+
+    else
+      invalid_method
+    end
   end
 
   verify :method => :put, :only => :update, :redirect_to => { :action => :invalid_method }
@@ -8,6 +12,10 @@ class ExternalSignupsController < ApplicationController
   end
 
   def invalid_method
-
+    respond_to do |format|
+      format.xml {
+        render :status => 405, :xml => {'error' => "Only POST methods are allowed"}.to_xml(:root => 'errors')
+      }
+    end
   end
 end
