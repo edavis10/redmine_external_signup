@@ -43,13 +43,13 @@ class ExternalSignupsControllerTest < ActionController::TestCase
 
   context "#update" do
     context "GET" do
-      should "return a 405 error"
-      should "return an XML document saying to use PUT"
+      setup { get :update }
+      should_respond_with_with_a_method_not_allowed(:use_method_instead => "PUT")
     end
 
     context "POST" do
-      should "return a 405 error"
-      should "return an XML document saying to use PUT"
+      setup { post :update }
+      should_respond_with_with_a_method_not_allowed(:use_method_instead => "PUT")
     end
 
     context "PUT" do
@@ -57,8 +57,8 @@ class ExternalSignupsControllerTest < ActionController::TestCase
     end
 
     context "DELETE" do
-      should "return a 405 error"
-      should "return an XML document saying to use PUT"
+      setup { delete :update }
+      should_respond_with_with_a_method_not_allowed(:use_method_instead => "PUT")
     end
   end
 end

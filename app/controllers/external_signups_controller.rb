@@ -3,18 +3,24 @@ class ExternalSignupsController < ApplicationController
     if request.post?
 
     else
-      invalid_method
+      invalid_method("POST")
     end
   end
 
-  verify :method => :put, :only => :update, :redirect_to => { :action => :invalid_method }
   def update
+    if request.put?
+
+    else
+      invalid_method("PUT")
+    end
   end
 
-  def invalid_method
+  private
+  
+  def invalid_method(http_method="POST")
     respond_to do |format|
       format.xml {
-        render :status => 405, :xml => {'error' => "Only POST methods are allowed"}.to_xml(:root => 'errors')
+        render :status => 405, :xml => {'error' => "Only #{http_method} methods are allowed"}.to_xml(:root => 'errors')
       }
     end
   end
