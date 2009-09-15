@@ -1,5 +1,5 @@
 <fieldset>
-  <%= content_tag(:legend, l(:external_signup_text_settings)) %>
+  <%= content_tag(:legend, l(:external_signup_text_settings_configuration)) %>
   <%= content_tag(:p, l(:external_signup_settings_help)) %>
 
   <p>
@@ -21,4 +21,29 @@
     <% else %>
       <%= link_to(l(:external_signup_missing_roles), :controller => 'roles', :action => 'index') %>
    <% end %>
+</fieldset>
+
+<fieldset>
+  <%= content_tag(:legend, l(:external_signup_text_settings_security)) %>
+  <%= content_tag(:p, l(:external_signup_settings_help_security)) %>
+
+  <p>
+    <%= content_tag(:label, l(:external_signup_security_key_label)) %>
+    <%= text_field_tag 'settings[security_key]', @settings['security_key'], :size => 30, :id => 'settings_security_key' %>
+    <script type="text/javascript">
+      function generateSecurityKey() {
+          var security_key = $('settings_security_key');
+          if (security_key.value == '') {
+              security_key.value = randomKey(20);
+          } else {
+              if (confirm("<%= l(:external_signup_security_key_generation_warning) -%>")) {
+                  security_key.value = randomKey(20);
+              }
+          }
+      }
+    </script>
+
+    <%= link_to_function l(:label_generate_key), "generateSecurityKey()" %>
+  </p>
+
 </fieldset>
