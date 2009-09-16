@@ -13,7 +13,11 @@ class ExternalSignupsControllerTest < ActionController::TestCase
     end
 
     context "POST" do
-      context "with a valid security token" do
+      setup do
+        setup_plugin_configuration
+      end
+
+      context "with a valid security key" do
         context "with valid data" do
           should "do things"
         end
@@ -24,10 +28,22 @@ class ExternalSignupsControllerTest < ActionController::TestCase
         end
       end
 
-      context "with an invalid security token" do
-        should "return a 403 error"
-        should "return an XML document saying the security token is invalid"
+      context "with an invalid security key" do
+        setup do
+          post :create, :security_key => 'invalid'
+        end
+
+        should_respond_with_an_invalid_security_key_error
       end
+
+      context "without a security key" do
+        setup do
+          post :create
+        end
+
+        should_respond_with_an_invalid_security_key_error
+      end
+
     end
 
     context "PUT" do
@@ -53,7 +69,37 @@ class ExternalSignupsControllerTest < ActionController::TestCase
     end
 
     context "PUT" do
-      should "do things"
+      setup do
+        setup_plugin_configuration
+      end
+
+      context "with a valid security key" do
+        context "with valid data" do
+          should "do things"
+        end
+
+        context "with missing data" do
+          should "return a 412 error"
+          should "return an XML document saying what data is missing"
+        end
+      end
+
+      context "with an invalid security key" do
+        setup do
+          put :update, :security_key => 'invalid'
+        end
+
+        should_respond_with_an_invalid_security_key_error
+      end
+
+      context "without a security key" do
+        setup do
+          put :update
+        end
+
+        should_respond_with_an_invalid_security_key_error
+      end
+
     end
 
     context "DELETE" do

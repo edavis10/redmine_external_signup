@@ -28,7 +28,10 @@ class Test::Unit::TestCase
   end
 
   def setup_plugin_configuration
+    @security_key = 'deadbeef1234'
+    
     configure_plugin({
+                       'security_key' => @security_key
                      })
   end
 end
@@ -43,6 +46,16 @@ class Test::Unit::TestCase
 
       should "return an XML document saying to use #{use_method_instead}" do
         assert_select 'errors error', /#{use_method_instead}/
+      end
+    end
+  end
+
+  def self.should_respond_with_an_invalid_security_key_error(options={})
+    context "" do
+      should_respond_with 403
+
+      should "return an XML document saying that the security key is invalid" do
+        assert_select 'errors error', /security key is invalid/
       end
     end
   end
