@@ -8,7 +8,7 @@ class ExternalSignupsController < ApplicationController
     @project = Project.new(params[:project])
     @project.status = Project::STATUS_ACTIVE
     @project.enabled_module_names = Redmine::AccessControl.available_project_modules
-    @project.identifier = @project.name.to_url if @project.name.present?
+    @project.identifier = @project.name.to_url[0,20] if @project.name.present?
 
 
     @user = User.new(params[:user])
