@@ -22,6 +22,13 @@ class ExternalSignupsController < ApplicationController
                          :project => @project,
                          :role_ids => Setting.plugin_redmine_external_signup['roles'].collect(&:to_s))
 
+    call_hook(:plugin_external_signup_controller_external_signups_create_pre_validate,
+              {
+                :project => @project,
+                :user => @user,
+                :member => @member,
+                :params => params
+              })
     # Run validations so all errors are available to the view
     @project.valid?
     @user.valid?
