@@ -29,8 +29,10 @@ class Test::Unit::TestCase
 
   def setup_plugin_configuration
     @security_key = 'deadbeef1234'
-    
+
+    @configured_roles = [Role.generate!, Role.generate!]
     configure_plugin({
+                       'roles' => @configured_roles.collect(&:id).collect(&:to_s),
                        'security_key' => @security_key
                      })
   end
@@ -120,6 +122,38 @@ class Test::Unit::TestCase
         project = Project.last
         assert project
         assert_equal Redmine::AccessControl.available_project_modules.length, project.enabled_modules.length, "not all modules where enabled"
+      end
+
+    end
+  end
+
+  def self.should_create_a_member(&block)
+    context 'should create a member' do
+      should 'be saved to the database' do
+        assert_difference 'Member.count', 1 do
+          instance_eval(&block)
+        end
+      end
+
+      should 'use the created user account' do
+        instance_eval(&block)
+        member = Member.last
+        user = User.last
+
+        assert member, "No member created"
+        assert user, "No user assigned"
+        assert_equal user, member.user
+      end
+
+      should 'assign each of the configured roles' do
+        instance_eval(&block)
+        member = Member.last
+
+        assert member, "No member created"
+        assert_equal 2, member.roles.length, "No roles assigned"
+        Setting.plugin_redmine_external_signup['roles'].each do |role_id|
+          assert member.role_ids.include? role_id.to_i
+        end
       end
 
     end

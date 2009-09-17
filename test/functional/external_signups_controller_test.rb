@@ -46,6 +46,8 @@ class ExternalSignupsControllerTest < ActionController::TestCase
                                }) { post :create, @valid_data }
 
           should_create_a_project({:name => "A test project"}) { post :create, @valid_data }
+
+          should_create_a_member { post :create, @valid_data }
           
           context "support data" do
             should "be created"

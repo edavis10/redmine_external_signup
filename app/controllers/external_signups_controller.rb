@@ -25,6 +25,11 @@ class ExternalSignupsController < ApplicationController
           ActiveRecord::Base.transaction do
             @project.save
             @user.save
+            @member = Member.new(:user => @user,
+                                 :project => @project,
+                                 :role_ids => Setting.plugin_redmine_external_signup['roles'].collect(&:to_s))
+            @member.save
+            
             # TODO: error state response
           end
         else
