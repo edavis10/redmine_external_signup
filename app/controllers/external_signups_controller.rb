@@ -24,6 +24,7 @@ class ExternalSignupsController < ApplicationController
         if @project.errors.length == 0 && @user.errors.length == 0
           ActiveRecord::Base.transaction do
             @project.save
+            @user.save
             # TODO: error state response
           end
         else

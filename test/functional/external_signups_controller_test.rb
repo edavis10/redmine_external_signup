@@ -28,7 +28,7 @@ class ExternalSignupsControllerTest < ActionController::TestCase
               :user => {
                 :firstname => "Test",
                 :lastname => "User",
-                :mail => "text@example.com",
+                :mail => "test@example.com",
                 :password => "testing123456",
                 :password_confirmation => "testing123456"
               }
@@ -38,11 +38,55 @@ class ExternalSignupsControllerTest < ActionController::TestCase
 
           
           context "for user" do
-            should "create a user with the firstname"
-            should "create a user with the lastname"
-            should "create a user with the mail"
-            should "create a user with the password"
-            should "create a user using the mail as their login"
+            should "create a user" do
+              # Need to call #anonymous so the anonymous user is
+              # created before the assert_difference
+              User.anonymous
+              assert_difference 'User.count', 1 do
+                post :create, @valid_data
+              end
+
+            end
+
+            should "create a user with the firstname" do
+              post :create, @valid_data
+              user = User.last
+              assert user
+              assert_equal 'Test', user.firstname
+            end
+
+            should "create a user with the lastname" do
+              post :create, @valid_data
+              user = User.last
+              assert user
+              assert_equal 'User', user.lastname
+            end
+
+            should "create a user with the mail" do
+              post :create, @valid_data
+              user = User.last
+              assert user
+              assert_equal 'test@example.com', user.mail
+            end
+
+            should "create a user with the password" do
+              post :create, @valid_data
+              assert User.try_to_login('test@example.com', 'testing123456')
+            end
+            
+            should "create a user using the mail as their login" do
+              post :create, @valid_data
+              user = User.last
+              assert user
+              assert_equal user.mail, user.login
+            end
+
+            should "activate the user" do
+              post :create, @valid_data
+              user = User.last
+              assert user
+              assert user.active?
+            end
           end
 
           context "for project" do
