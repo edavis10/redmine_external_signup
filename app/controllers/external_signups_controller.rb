@@ -29,23 +29,23 @@ class ExternalSignupsController < ApplicationController
     @member.valid?
     
     if @project.errors.length == 0 && @user.errors.length == 0 && @member.errors.length == 0
-      begin
-        ActiveRecord::Base.transaction do
-          @project.save!
-          @user.save!
-          @member.save!
 
-          respond_to do |format|
+      respond_to do |format|
+        begin
+          ActiveRecord::Base.transaction do
+            @project.save!
+            @user.save!
+            @member.save!
+
             format.xml { render :layout => false }
           end
-        end
-      rescue ActiveRecord::StatementInvalid, ActiveRecord::RecordNotSaved => ex
-        @message = ex.message
-        respond_to do |format|
+        rescue ActiveRecord::StatementInvalid, ActiveRecord::RecordNotSaved => ex
+          @message = ex.message
+          
           format.xml { render :status => 500, :layout => false, :action => 'missing_data'}
         end
-
       end
+
     else
       missing_required_data
     end
