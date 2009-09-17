@@ -53,7 +53,7 @@ class ExternalSignupsControllerTest < ActionController::TestCase
             should "be created"
           end
 
-          should 'return a 200 xml'
+          should_respond_with_a_successful_xml_message { post :create, @valid_data }
         end
 
         context "with missing data" do

@@ -158,6 +158,27 @@ class Test::Unit::TestCase
 
     end
   end
+
+  def self.should_respond_with_a_successful_xml_message(options={}, &block)
+    context "" do
+      setup do
+        instance_eval(&block)
+      end
+      
+      should_respond_with 200
+
+      should "return an success XML document" do
+        assert_select 'success' do
+          assert_select('member') do
+            assert_select('project')
+            assert_select('user')
+          end
+          # Match the full path and at least the projects controller
+          assert_select('project_url',/http.*projects/)
+        end
+      end
+    end
+  end
   
   def self.should_respond_with_with_a_method_not_allowed(options={})
     use_method_instead = options.delete(:use_method_instead) || "POST"

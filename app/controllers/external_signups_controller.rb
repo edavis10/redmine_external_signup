@@ -29,7 +29,10 @@ class ExternalSignupsController < ApplicationController
                                  :project => @project,
                                  :role_ids => Setting.plugin_redmine_external_signup['roles'].collect(&:to_s))
             @member.save
-            
+
+            respond_to do |format|
+              format.xml { render :layout => false }
+            end
             # TODO: error state response
           end
         else
