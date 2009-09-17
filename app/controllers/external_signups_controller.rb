@@ -18,18 +18,19 @@ class ExternalSignupsController < ApplicationController
       @user.password_confirmation = params[:user][:password_confirmation] if params[:user][:password_confirmation].present?
     end
 
+    @member = Member.new(:user => @user,
+                         :project => @project,
+                         :role_ids => Setting.plugin_redmine_external_signup['roles'].collect(&:to_s))
+
     # Run validations so all errors are available to the view
     @project.valid?
     @user.valid?
     @user.errors.add_on_blank([:password, :password_confirmation])
-
+    @member.valid?
     
-    if @project.errors.length == 0 && @user.errors.length == 0
+    if @project.errors.length == 0 && @user.errors.length == 0 && @member.errors.length == 0
       begin
         ActiveRecord::Base.transaction do
-          @member = Member.new(:user => @user,
-                               :project => @project,
-                               :role_ids => Setting.plugin_redmine_external_signup['roles'].collect(&:to_s))
           @project.save!
           @user.save!
           @member.save!
