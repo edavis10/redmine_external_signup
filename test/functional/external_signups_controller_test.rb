@@ -34,7 +34,6 @@ class ExternalSignupsControllerTest < ActionController::TestCase
               }
             }
             
-            post :create, @valid_data
           end
 
           
@@ -47,14 +46,31 @@ class ExternalSignupsControllerTest < ActionController::TestCase
           end
 
           context "for project" do
+
+            
+            should "create a project" do
+              assert_difference 'Project.count', 1 do
+                post :create, @valid_data
+              end
+            end
+
             should "create a project with the name"
-            should "generate an identifer"
+
+            should "generate an identifer" do
+              post :create, @valid_data
+              project = Project.last
+              assert project
+              assert_equal 'a-test-project', project.identifier
+            end
+
             should "enable all the modules"
           end
 
           context "support data" do
             should "be created"
           end
+
+          should 'return a 200 xml'
         end
 
         context "with missing data" do

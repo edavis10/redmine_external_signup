@@ -1,5 +1,7 @@
 require 'redmine'
 
+config.gem "rsl-stringex", :lib => "stringex", :source => "http://gems.github.com"
+
 if Rails.env == "test"
   
   # Bootstrap ObjectDaddy since it's needs to load before the Models

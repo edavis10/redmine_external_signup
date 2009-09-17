@@ -3,8 +3,11 @@ class ExternalSignupsController < ApplicationController
     if request.post?
       if security_key_valid?
         @project = Project.new(params[:project])
-        # TODO: urlify
-        @project.identifer = params[:project][:name] if params[:project].present? && params[:project][:name].present?
+
+        if @project.name.present?
+          @project.identifier = @project.name.to_url
+        end
+
         @project.status = Project::STATUS_ACTIVE
         # TODO: Project modules
 
@@ -22,7 +25,10 @@ class ExternalSignupsController < ApplicationController
 
         
         if @project.errors.length == 0 && @user.errors.length == 0
-        
+          ActiveRecord::Base.transaction do
+            @project.save
+            # TODO: error state response
+          end
         else
           missing_required_data
         end
