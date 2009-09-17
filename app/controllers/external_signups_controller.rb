@@ -1,7 +1,10 @@
 class ExternalSignupsController < ApplicationController
+  # Similar to #verify but with a rendering instead of a redirect
+  before_filter :check_valid_http_method
+  before_filter :check_security_key
+
+  
   def create
-    if request.post?
-      if security_key_valid?
         @project = Project.new(params[:project])
         @project.status = Project::STATUS_ACTIVE
         @project.enabled_module_names = Redmine::AccessControl.available_project_modules
@@ -45,27 +48,27 @@ class ExternalSignupsController < ApplicationController
         else
           missing_required_data
         end
-      else
-        invalid_security_key
-      end
-    else
-      invalid_method("POST")
-    end
   end
 
   def update
-    if request.put?
-      if security_key_valid?
-
-      else
-        invalid_security_key
-      end
-    else
-      invalid_method("PUT")
-    end
   end
 
   private
+
+  def check_valid_http_method
+    case params[:action]
+    when 'create'
+      invalid_method("POST") unless request.post?
+    when 'update'
+      invalid_method("PUT") unless request.put?
+    else
+      false
+    end
+  end
+  
+  def check_security_key
+    invalid_security_key unless security_key_valid?
+  end
   
   def invalid_method(http_method="POST")
     respond_to do |format|
