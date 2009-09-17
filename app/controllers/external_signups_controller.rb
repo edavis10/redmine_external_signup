@@ -5,49 +5,49 @@ class ExternalSignupsController < ApplicationController
 
   
   def create
-        @project = Project.new(params[:project])
-        @project.status = Project::STATUS_ACTIVE
-        @project.enabled_module_names = Redmine::AccessControl.available_project_modules
-        @project.identifier = @project.name.to_url if @project.name.present?
+    @project = Project.new(params[:project])
+    @project.status = Project::STATUS_ACTIVE
+    @project.enabled_module_names = Redmine::AccessControl.available_project_modules
+    @project.identifier = @project.name.to_url if @project.name.present?
 
 
-        @user = User.new(params[:user])
-        @user.login = @user.mail
-        if params[:user].present?
-          @user.password = params[:user][:password] if params[:user][:password].present?
-          @user.password_confirmation = params[:user][:password_confirmation] if params[:user][:password_confirmation].present?
-        end
+    @user = User.new(params[:user])
+    @user.login = @user.mail
+    if params[:user].present?
+      @user.password = params[:user][:password] if params[:user][:password].present?
+      @user.password_confirmation = params[:user][:password_confirmation] if params[:user][:password_confirmation].present?
+    end
 
-        # Run validations so all errors are available to the view
-        @project.valid?
-        @user.valid?
-        @user.errors.add_on_blank([:password, :password_confirmation])
+    # Run validations so all errors are available to the view
+    @project.valid?
+    @user.valid?
+    @user.errors.add_on_blank([:password, :password_confirmation])
 
-        
-        if @project.errors.length == 0 && @user.errors.length == 0
-          begin
-            ActiveRecord::Base.transaction do
-              @member = Member.new(:user => @user,
-                                   :project => @project,
-                                   :role_ids => Setting.plugin_redmine_external_signup['roles'].collect(&:to_s))
-              @project.save!
-              @user.save!
-              @member.save!
+    
+    if @project.errors.length == 0 && @user.errors.length == 0
+      begin
+        ActiveRecord::Base.transaction do
+          @member = Member.new(:user => @user,
+                               :project => @project,
+                               :role_ids => Setting.plugin_redmine_external_signup['roles'].collect(&:to_s))
+          @project.save!
+          @user.save!
+          @member.save!
 
-              respond_to do |format|
-                format.xml { render :layout => false }
-              end
-            end
-          rescue ActiveRecord::StatementInvalid, ActiveRecord::RecordNotSaved => ex
-            @message = ex.message
-            respond_to do |format|
-              format.xml { render :status => 500, :layout => false, :action => 'missing_data'}
-            end
-
+          respond_to do |format|
+            format.xml { render :layout => false }
           end
-        else
-          missing_required_data
         end
+      rescue ActiveRecord::StatementInvalid, ActiveRecord::RecordNotSaved => ex
+        @message = ex.message
+        respond_to do |format|
+          format.xml { render :status => 500, :layout => false, :action => 'missing_data'}
+        end
+
+      end
+    else
+      missing_required_data
+    end
   end
 
   def update
