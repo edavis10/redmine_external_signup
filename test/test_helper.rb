@@ -38,6 +38,61 @@ end
 
 # Shoulda
 class Test::Unit::TestCase
+  def self.should_create_a_user(user_attributes, &block)
+    context 'should create a user' do
+      should 'saved to the database' do
+        # Need to call #anonymous so the anonymous user is
+        # created before the assert_difference
+        User.anonymous
+        assert_difference 'User.count', 1 do
+          instance_eval(&block)
+        end
+
+      end
+
+      should "create a user with the firstname" do
+        instance_eval(&block)
+        user = User.last
+        assert user
+        assert_equal user_attributes[:firstname], user.firstname
+      end
+
+      should "create a user with the lastname" do
+        instance_eval(&block)
+        user = User.last
+        assert user
+        assert_equal user_attributes[:lastname], user.lastname
+      end
+
+      should "create a user with the mail" do
+        instance_eval(&block)
+        user = User.last
+        assert user
+        assert_equal user_attributes[:mail], user.mail
+      end
+
+      should "create a user with the password" do
+        instance_eval(&block)
+        assert User.try_to_login(user_attributes[:mail], user_attributes[:password])
+      end
+      
+      should "create a user using the mail as their login" do
+        instance_eval(&block)
+        user = User.last
+        assert user
+        assert_equal user.mail, user.login
+      end
+
+      should "be active" do
+        instance_eval(&block)
+        user = User.last
+        assert user
+        assert user.active?
+      end
+    end
+    
+  end
+  
   def self.should_respond_with_with_a_method_not_allowed(options={})
     use_method_instead = options.delete(:use_method_instead) || "POST"
 
