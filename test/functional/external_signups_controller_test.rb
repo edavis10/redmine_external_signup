@@ -49,9 +49,8 @@ class ExternalSignupsControllerTest < ActionController::TestCase
 
           should_create_a_member { post :create, @valid_data }
           
-          context "support data" do
-            should "be created"
-          end
+          # Support data is added via a hook and is tested in the
+          # redmine_project_support_hours plugin
 
           should_respond_with_a_successful_xml_message { post :create, @valid_data }
 
