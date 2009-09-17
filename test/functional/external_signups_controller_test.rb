@@ -45,35 +45,8 @@ class ExternalSignupsControllerTest < ActionController::TestCase
                                  :password_confirmation => "testing123456"
                                }) { post :create, @valid_data }
 
-          context "for project" do
-            should "create a project" do
-              assert_difference 'Project.count', 1 do
-                post :create, @valid_data
-              end
-            end
-
-            should "create a project with the name" do
-              post :create, @valid_data
-              project = Project.last
-              assert project
-              assert_equal 'A test project', project.name
-            end
-
-            should "generate an identifer" do
-              post :create, @valid_data
-              project = Project.last
-              assert project
-              assert_equal 'a-test-project', project.identifier
-            end
-
-            should "enable all the modules" do
-              post :create, @valid_data
-              project = Project.last
-              assert project
-              assert_equal Redmine::AccessControl.available_project_modules.length, project.enabled_modules.length, "not all modules where enabled"
-            end
-          end
-
+          should_create_a_project({:name => "A test project"}) { post :create, @valid_data }
+          
           context "support data" do
             should "be created"
           end

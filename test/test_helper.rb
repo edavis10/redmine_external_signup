@@ -92,6 +92,38 @@ class Test::Unit::TestCase
     end
     
   end
+
+  def self.should_create_a_project(project_attributes, &block)
+    context 'should create a project' do
+      should "saved to the database" do
+        assert_difference 'Project.count', 1 do
+          instance_eval(&block)
+        end
+      end
+
+      should "create a project with the name" do
+        instance_eval(&block)
+        project = Project.last
+        assert project
+        assert_equal 'A test project', project.name
+      end
+
+      should "generate an identifer" do
+        instance_eval(&block)
+        project = Project.last
+        assert project
+        assert_equal 'a-test-project', project.identifier
+      end
+
+      should "enable all the modules" do
+        instance_eval(&block)
+        project = Project.last
+        assert project
+        assert_equal Redmine::AccessControl.available_project_modules.length, project.enabled_modules.length, "not all modules where enabled"
+      end
+
+    end
+  end
   
   def self.should_respond_with_with_a_method_not_allowed(options={})
     use_method_instead = options.delete(:use_method_instead) || "POST"
