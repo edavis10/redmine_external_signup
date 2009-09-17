@@ -46,15 +46,18 @@ class ExternalSignupsControllerTest < ActionController::TestCase
           end
 
           context "for project" do
-
-            
             should "create a project" do
               assert_difference 'Project.count', 1 do
                 post :create, @valid_data
               end
             end
 
-            should "create a project with the name"
+            should "create a project with the name" do
+              post :create, @valid_data
+              project = Project.last
+              assert project
+              assert_equal 'A test project', project.name
+            end
 
             should "generate an identifer" do
               post :create, @valid_data
@@ -63,7 +66,12 @@ class ExternalSignupsControllerTest < ActionController::TestCase
               assert_equal 'a-test-project', project.identifier
             end
 
-            should "enable all the modules"
+            should "enable all the modules" do
+              post :create, @valid_data
+              project = Project.last
+              assert project
+              assert_equal Redmine::AccessControl.available_project_modules.length, project.enabled_modules.length, "not all modules where enabled"
+            end
           end
 
           context "support data" do

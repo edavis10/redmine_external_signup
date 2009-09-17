@@ -3,13 +3,10 @@ class ExternalSignupsController < ApplicationController
     if request.post?
       if security_key_valid?
         @project = Project.new(params[:project])
-
-        if @project.name.present?
-          @project.identifier = @project.name.to_url
-        end
-
         @project.status = Project::STATUS_ACTIVE
-        # TODO: Project modules
+        @project.enabled_module_names = Redmine::AccessControl.available_project_modules
+        @project.identifier = @project.name.to_url if @project.name.present?
+
 
         @user = User.new(params[:user])
         @user.login = @user.mail
