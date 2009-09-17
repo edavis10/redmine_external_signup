@@ -2,7 +2,30 @@ class ExternalSignupsController < ApplicationController
   def create
     if request.post?
       if security_key_valid?
+        @project = Project.new(params[:project])
+        # TODO: urlify
+        @project.identifer = params[:project][:name] if params[:project].present? && params[:project][:name].present?
+        @project.status = Project::STATUS_ACTIVE
+        # TODO: Project modules
 
+        @user = User.new(params[:user])
+        @user.login = @user.mail
+        if params[:user].present?
+          @user.password = params[:user][:password] if params[:user][:password].present?
+          @user.password_confirmation = params[:user][:password_confirmation] if params[:user][:password_confirmation].present?
+        end
+
+        # Run validations so all errors are available to the view
+        @project.valid?
+        @user.valid?
+        @user.errors.add_on_blank([:password, :password_confirmation])
+
+        
+        if @project.errors.length == 0 && @user.errors.length == 0
+        
+        else
+          missing_required_data
+        end
       else
         invalid_security_key
       end
@@ -41,8 +64,17 @@ class ExternalSignupsController < ApplicationController
     end
   end
 
+  def missing_required_data
+    respond_to do |format|
+      format.xml {
+        render :status => 412, :layout => false, :action => 'missing_data'
+      }
+    end
+  end
+
   def security_key_valid?
     settings = Setting.plugin_redmine_external_signup
     return settings['security_key'] && params[:security_key] && settings['security_key'] == params[:security_key].to_s
   end
+
 end

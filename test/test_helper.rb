@@ -59,4 +59,34 @@ class Test::Unit::TestCase
       end
     end
   end
+
+  def self.should_respond_with_a_missing_required_data_error(options={})
+    default_data = {
+      :project => [:name],
+      :user => [:firstname, :lastname, :mail, :password, :password_confirmation]
+    }
+    missing_data = options.delete(:missing_data) || default_data
+      
+    context "" do
+      should_respond_with 412
+
+      should "return an XML document saying what data is missing" do
+        assert_select('errors') do
+
+          missing_data.each do |object, fields_missing|
+            assert_select("#{object}") do
+
+              fields_missing.each do |field|
+                assert_select('missingData[field=?]', field)
+              end
+
+            end
+          end
+
+        end
+      end # should
+
+    end
+    
+  end
 end
