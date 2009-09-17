@@ -1,5 +1,8 @@
 xml.instruct!
 xml.errors do
+  if @message
+    xml.message @message
+  end
   if @project.errors.length > 0
     xml.project do  
       @project.errors.each do |attr, message|

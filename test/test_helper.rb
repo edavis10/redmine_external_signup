@@ -180,6 +180,18 @@ class Test::Unit::TestCase
     end
   end
   
+  def self.should_respond_with_a_server_error_xml_message(options={})
+    context "" do
+      should_respond_with 500
+
+      should "return a server error XML document" do
+        assert_select 'errors' do
+          assert_select('message', 'ActiveRecord::RecordNotSaved')
+        end
+      end
+    end
+  end
+  
   def self.should_respond_with_with_a_method_not_allowed(options={})
     use_method_instead = options.delete(:use_method_instead) || "POST"
 

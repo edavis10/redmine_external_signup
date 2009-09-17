@@ -22,18 +22,25 @@ class ExternalSignupsController < ApplicationController
 
         
         if @project.errors.length == 0 && @user.errors.length == 0
-          ActiveRecord::Base.transaction do
-            @project.save
-            @user.save
-            @member = Member.new(:user => @user,
-                                 :project => @project,
-                                 :role_ids => Setting.plugin_redmine_external_signup['roles'].collect(&:to_s))
-            @member.save
+          begin
+            ActiveRecord::Base.transaction do
+              @member = Member.new(:user => @user,
+                                   :project => @project,
+                                   :role_ids => Setting.plugin_redmine_external_signup['roles'].collect(&:to_s))
+              @project.save!
+              @user.save!
+              @member.save!
 
-            respond_to do |format|
-              format.xml { render :layout => false }
+              respond_to do |format|
+                format.xml { render :layout => false }
+              end
             end
-            # TODO: error state response
+          rescue ActiveRecord::StatementInvalid, ActiveRecord::RecordNotSaved => ex
+            @message = ex.message
+            respond_to do |format|
+              format.xml { render :status => 500, :layout => false, :action => 'missing_data'}
+            end
+
           end
         else
           missing_required_data

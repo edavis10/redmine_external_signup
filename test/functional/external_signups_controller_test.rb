@@ -54,6 +54,15 @@ class ExternalSignupsControllerTest < ActionController::TestCase
           end
 
           should_respond_with_a_successful_xml_message { post :create, @valid_data }
+
+          context "but with a server error" do
+            setup do
+              Project.any_instance.stubs(:create_or_update).returns(false)
+              post :create, @valid_data
+            end
+
+            should_respond_with_a_server_error_xml_message
+          end
         end
 
         context "with missing data" do
