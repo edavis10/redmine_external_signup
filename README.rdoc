@@ -4,7 +4,7 @@ External signup is a Redmine plugin that allows an external source create a new 
 
 == Features
 
-* __FEATURE__
+* __TODO__
 
 == Getting the plugin
 
@@ -14,13 +14,39 @@ A copy of the plugin can be downloaded from {Little Stream Software}[https://pro
 == Installation and Setup
 
 1. Follow the Redmine plugin installation steps at: http://www.redmine.org/wiki/redmine/Plugins 
-2. Run the plugin migrations +rake db:migrate_plugins+
-3. Restart your Redmine web servers (e.g. mongrel, thin, mod_rails)
-4. Configure w/security key
+2. Restart your Redmine web servers (e.g. mongrel, thin, mod_rails)
+3. Login as an Administrator and configure the security key as well as any other data in: Administration > Plugins > Configure
 
 == Usage
 
-__XXX__
+=== Creating a new project and user
+
+An example form is provided in examples/signup_form.html.  To simulate the signup process:
+
+1. Make sure you have generated a security key from your Redmine (above).
+2. Edit the action of the example form to point to your Redmine site.
+3. Make sure all of the required (*) fields are filled in.
+4. Submit the form
+5. Redmine will return specific xml documents based on if the request was successful.  The HTTP status code of the response can be used to determine if the action was successful.
+
+=== HTTP Responses
+
+* HTTP 200 - Success.
+* HTTP 400/404 - Not connecting to the Redmine server / misconfiguration.
+* HTTP 403 - Unauthorized request. e.g misconfiguration or invalid security token.
+* HTTP 405 - Method not allowed (e.g. form not sending data using the correct HTTP verb like POST or PUT).
+* HTTP 412 - Missing required data. Check the XML response for details.
+* HTTP 500 - Error on the server. Check the server log files (e.g. log/production.org).
+
+=== XML Documents
+
+There are several XML documents that may be returned from the server.  The different document types can be determined by the HTTP responses above.
+
+* Success - will contain a 'success' tag as well as details about the Member, User, and Project created.  See examples/external_signup_success.xml
+* Invalid Security key - Will contain a message that the key is invalid.  See examples/external_signup_failed_security_key.xml
+* Missing data - Will contain sections for each type of data and what fields had errors.  See examples/external_signup_failed_validations.xml
+* Invalid HTTP method - Will contain what HTTP methods (verbs) are allowed.
+* Server error - Will contain the Ruby exception that was raised. (rare)
 
 == License
 
