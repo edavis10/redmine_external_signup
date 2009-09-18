@@ -18,9 +18,13 @@ class ExternalSignupsController < ApplicationController
       @user.password_confirmation = params[:user][:password_confirmation] if params[:user][:password_confirmation].present?
     end
 
+    roles_setting = Setting.plugin_redmine_external_signup['roles']
+    roles = roles_setting.collect(&:to_s) unless roles_setting.blank?
+    roles ||= []
+
     @member = Member.new(:user => @user,
                          :project => @project,
-                         :role_ids => Setting.plugin_redmine_external_signup['roles'].collect(&:to_s))
+                         :role_ids => roles)
 
     call_hook(:plugin_external_signup_controller_external_signups_create_pre_validate,
               {
@@ -104,7 +108,7 @@ class ExternalSignupsController < ApplicationController
 
   def security_key_valid?
     settings = Setting.plugin_redmine_external_signup
-    return settings['security_key'] && params[:security_key] && settings['security_key'] == params[:security_key].to_s
+    return settings['security_key'] && params[:security_key] && settings['security_key'].present? && settings['security_key'] == params[:security_key].to_s
   end
 
 end

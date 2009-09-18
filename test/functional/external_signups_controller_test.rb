@@ -89,6 +89,15 @@ class ExternalSignupsControllerTest < ActionController::TestCase
         should_respond_with_an_invalid_security_key_error
       end
 
+      context "with an security key configured" do
+        setup do
+          configure_plugin('security_key' => '')
+          post :create, :security_key => ''
+        end
+
+        should_respond_with_an_invalid_security_key_error
+      end
+
     end
 
     context "PUT" do
