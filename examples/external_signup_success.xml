@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<success>
+  <member>
+    <created-on type="datetime">2009-09-18T14:25:36-07:00</created-on>
+    <id type="integer">148</id>
+    <mail-notification type="boolean">false</mail-notification>
+    <project-id type="integer">20</project-id>
+    <user-id type="integer">13</user-id>
+
+    <user>
+      <admin type="boolean">false</admin>
+      <auth-source-id type="integer" nil="true"></auth-source-id>
+      <created-on type="datetime">2009-09-18T14:25:36-07:00</created-on>
+      <firstname>John</firstname>
+      <hashed-password>dc724af18fbdd4e59189f5fe768a5f8311527050</hashed-password>
+      <id type="integer">13</id>
+
+      <identity-url nil="true"></identity-url>
+      <language></language>
+      <last-login-on type="datetime" nil="true"></last-login-on>
+      <lastname>Doe</lastname>
+      <login>user@example.com</login>
+      <mail>user@example.com</mail>
+      <mail-notification type="boolean">false</mail-notification>
+
+      <status type="integer">1</status>
+      <updated-on type="datetime">2009-09-18T14:25:36-07:00</updated-on>
+    </user>
+
+    <project>
+      <created-on type="datetime">2009-09-18T14:25:36-07:00</created-on>
+      <customer-id type="integer" nil="true"></customer-id>
+      <description nil="true"></description>
+
+      <homepage></homepage>
+      <id type="integer">20</id>
+      <identifier>a-project</identifier>
+      <is-public type="boolean">true</is-public>
+      <lft type="integer">39</lft>
+      <name>A Project</name>
+
+      <parent-id type="integer" nil="true"></parent-id>
+      <rgt type="integer">40</rgt>
+      <status type="integer">1</status>
+      <total-value type="decimal" nil="true"></total-value>
+      <updated-on type="datetime">2009-09-18T14:25:36-07:00</updated-on>
+    </project>
+  </member>
+  <project_url>http://localhost:3000/projects/a-project</project_url>
+</success>

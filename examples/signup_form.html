@@ -1,0 +1,78 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="Content-Language" content="en-us" />
+    <title>Example form</title>
+  </head>
+  <body>
+
+    <div id="container">
+      <p>You will need to change the action for this form to be http://your-redmine/external_signups (HTTPS is also fine)</p>
+      <form method="post" enctype="multipart/form-data" action="http://localhost:3000/external_signups">
+        
+        <fieldset>
+          <legend>Security - Whoever sends this key to your Redmine will be able to create a project and user.  This should be hidden behind a backend signup process.</lengend>
+
+          <p>
+            <label for="security_key">Security Key *</label>
+            <input type="text" value="" size="80" name="security_key" id="security_key"/>
+          </p>
+        </fieldset>
+
+        <fieldset>
+          <legend>Project</lengend>
+
+          <p>
+            <label for="project_name">Project Name *</label>
+            <input type="text" value="A Project" size="30" name="project[name]" id="project_name"/>
+          </p>
+        </fieldset>
+
+        <fieldset>
+          <legend>User</lengend>
+
+          <p>
+            <label for="user_firstname">First name *</label>
+            <input type="text" value="John" size="30" name="user[firstname]" id="user_firstname"/>
+          </p>
+          <p>
+            <label for="user_lastname">Last name *</label>
+            <input type="text" value="Doe" size="30" name="user[lastname]" id="user_lastname"/>
+          </p>
+          <p>
+            <label for="user_mail">Email / Login *</label>
+            <input type="text" value="user@example.com" size="30" name="user[mail]" id="user_mail"/>
+          </p>
+          <p>
+            <label for="user_password">Password *</label>
+            <input type="password" value="testing" size="80" name="user[password]" id="user_password"/>
+          </p>
+          <p>
+            <label for="user_password">Password Confirmation *</label>
+            <input type="password" value="testing" size="80" name="user[password_confirmation]" id="user_password_confirmation"/>
+          </p>
+        </fieldset>
+
+        <fieldset>
+          <legend>Support data</lengend>
+
+          <p>
+            <label for="support_hours">Hours</label>
+            <input type="text" value="1000.5" size="80" name="support[hours]" id="support_hours"/>
+          </p>
+          <p>
+            <label for="support_start_date">Start_date</label>
+            <input type="text" value="2009-01-01" size="80" name="support[start_date]" id="support_start_date"/>
+          </p>
+          <p>
+            <label for="support_end_date">End date</label>
+            <input type="text" value="2010-01-01" size="80" name="support[end_date]" id="support_end_date"/>
+          </p>
+        </fieldset>
+        
+        <input type="submit" value="Submit" />
+      </form>
+    </div>
+  </body>
+</html>

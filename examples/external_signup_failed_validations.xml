@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Unique constraints caused the input to fail on the project and user -->
+<errors>
+  <project>
+    <missingData field="name">name has already been taken</missingData>
+    <missingData field="identifier">identifier has already been taken</missingData>
+  </project>
+  <user>
+    <missingData field="mail">mail has already been taken</missingData>
+
+    <missingData field="login">login has already been taken</missingData>
+  </user>
+</errors>
