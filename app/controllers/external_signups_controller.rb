@@ -1,4 +1,5 @@
 class ExternalSignupsController < ApplicationController
+  unloadable
   # Similar to #verify but with a rendering instead of a redirect
   before_filter :check_valid_http_method
   before_filter :check_security_key
@@ -63,7 +64,7 @@ class ExternalSignupsController < ApplicationController
   end
 
   def update
-    if (params[:project] && params[:project][:id]) || (params[:user] && params[:user][:id])
+    if (params[:project] && params[:project][:id].present?) || (params[:user] && params[:user][:id].present?)
       respond_to do |format|
 
         project_saved, user_saved = true, true
@@ -101,7 +102,7 @@ class ExternalSignupsController < ApplicationController
       @project = Project.new
       @project.errors.add(:id, "missing.  Use the integer id (e.g. 42) or the identifier (e.g. a-project)")
       @user = User.new
-      @user.errors.add(:id, :missing)
+      @user.errors.add(:id, :empty)
       missing_required_data
     end
   end
