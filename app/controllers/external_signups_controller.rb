@@ -78,6 +78,13 @@ class ExternalSignupsController < ApplicationController
           user_saved = @user.update_attributes(params[:user])
         end
 
+        call_hook(:plugin_external_signup_controller_external_signups_update,
+                  {
+                    :project => @project,
+                    :user => @user,
+                    :params => params
+                  })
+        
         if project_saved && user_saved
           format.xml { render :layout => false }
         else
