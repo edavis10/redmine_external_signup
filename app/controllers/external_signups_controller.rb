@@ -63,6 +63,13 @@ class ExternalSignupsController < ApplicationController
   end
 
   def update
+    if params[:project] && params[:project][:id]
+      # TODO: do stuff
+    else
+      @project = Project.new
+      @project.errors.add(:id, "missing.  Use the integer id (e.g. 42) or the identifier (e.g. a-project)")
+      missing_required_data
+    end
   end
 
   private

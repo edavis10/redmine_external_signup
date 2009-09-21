@@ -133,8 +133,11 @@ class ExternalSignupsControllerTest < ActionController::TestCase
         end
 
         context "with missing data" do
-          should "return a 412 error"
-          should "return an XML document saying what data is missing"
+          setup do
+            put :update, :security_key => @security_key
+          end
+
+          should_respond_with_a_missing_required_data_error(:missing_data => {:project => [:id]})
         end
       end
 
