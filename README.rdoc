@@ -4,7 +4,10 @@ External signup is a Redmine plugin that allows an external source create a new 
 
 == Features
 
-* __TODO__
+Provides two RESTful web service endpoints to:
+
+* Add a new Project, User, and Member to Redmine.
+* Update an existing Project or User.
 
 == Getting the plugin
 
