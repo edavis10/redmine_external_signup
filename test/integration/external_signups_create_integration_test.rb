@@ -1,6 +1,6 @@
 require File.dirname(__FILE__) + '/../test_helper'
 
-class ExternalSignupsIntegrationTest < ActionController::IntegrationTest
+class ExternalSignupsCreateIntegrationTest < ActionController::IntegrationTest
   def send_request
     post "/external_signups/", {
       :security_key => @security_key,

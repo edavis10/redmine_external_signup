@@ -2,7 +2,7 @@ require File.dirname(__FILE__) + '/../test_helper'
 
 if Redmine::Plugin.registered_plugins.keys.include?(:redmine_project_support_hours)
 
-  class ExternalSignupsIntegrationTest < ActionController::IntegrationTest
+  class ExternalSignupsCreateWithSupportHoursIntegrationTest < ActionController::IntegrationTest
     def send_request_with_support_hours
       post "/external_signups/", {
         :security_key => @security_key,
