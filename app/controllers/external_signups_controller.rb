@@ -63,11 +63,28 @@ class ExternalSignupsController < ApplicationController
   end
 
   def update
-    if params[:project] && params[:project][:id]
-      # TODO: do stuff
+    if (params[:project] && params[:project][:id]) || (params[:user] && params[:user][:id])
+      respond_to do |format|
+        
+        if params[:project] && params[:project][:id]
+          @project = Project.find(params[:project][:id])
+          project_saved = @project.update_attributes(params[:project])
+        end
+
+        if params[:user] && params[:user][:id]
+          @user = User.find(params[:user][:id])
+          user_saved = @user.update_attributes(params[:user])
+        end
+
+        format.xml { render :layout => false }
+        # TODO: error state
+      end
     else
+      @message = "Missing a project or user id"
       @project = Project.new
       @project.errors.add(:id, "missing.  Use the integer id (e.g. 42) or the identifier (e.g. a-project)")
+      @user = User.new
+      @user.errors.add(:id, :missing)
       missing_required_data
     end
   end

@@ -129,7 +129,61 @@ class ExternalSignupsControllerTest < ActionController::TestCase
 
       context "with a valid security key" do
         context "with valid data" do
-          should "do things"
+          setup do
+            @project = Project.generate!
+            @user = User.generate_with_protected!
+            @member = Member.generate!({
+                                         :role_ids => @configured_roles.collect(&:id),
+                                         :user => @user,
+                                         :project => @project
+                                       })
+          end
+          
+          context "updates to the project" do
+            context "allow updating name" do
+              should_respond_with_a_successful_xml_update_message(:project => {:name => 'A new name'}) do
+                put :update, :security_key => @security_key, :project => {:id => @project.id, :name => 'A new name'}
+              end
+            end
+
+            context "allow updating descripton" do
+              should_respond_with_a_successful_xml_update_message(:project => {:description => 'An updated description'}) do
+                put :update, :security_key => @security_key, :project => {:id => @project.id, :description => 'An updated description'}
+              end
+            end
+            
+            context "allow updating homepage" do
+              should_respond_with_a_successful_xml_update_message(:project => {:homepage => 'http://example.com'}) do
+                put :update, :security_key => @security_key, :project => {:id => @project.id, :homepage => 'http://example.com'}
+              end
+            end
+
+            should "not allow updating identifer"
+
+          end
+
+          context "updates the user" do
+            context "allow updating firstname" do
+              should_respond_with_a_successful_xml_update_message(:user => {:firstname => 'Test update'}) do
+                put :update, :security_key => @security_key, :user => {:id => @user.id, :firstname => 'Test update'}
+              end
+            end
+
+            context "allow updating lastname" do
+              should_respond_with_a_successful_xml_update_message(:user => {:lastname => 'Another'}) do
+                put :update, :security_key => @security_key, :user => {:id => @user.id, :lastname => 'Another'}
+              end
+            end
+
+            context "allow updating mail" do
+              should_respond_with_a_successful_xml_update_message(:user => {:mail => 'user2@example.com'}) do
+                put :update, :security_key => @security_key, :user => {:id => @user.id, :mail => 'user2@example.com'}
+              end
+            end
+          end
+
+          # Support data is added via a hook and is tested in the
+          # redmine_project_support_hours plugin
         end
 
         context "with missing data" do
@@ -137,7 +191,7 @@ class ExternalSignupsControllerTest < ActionController::TestCase
             put :update, :security_key => @security_key
           end
 
-          should_respond_with_a_missing_required_data_error(:missing_data => {:project => [:id]})
+          should_respond_with_a_missing_required_data_error(:missing_data => {:project => [:id], :user => [:id]})
         end
       end
 

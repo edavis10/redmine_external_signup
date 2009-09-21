@@ -179,7 +179,42 @@ class Test::Unit::TestCase
       end
     end
   end
-  
+
+  def self.should_respond_with_a_successful_xml_update_message(updated_data, options={}, &block)
+    context "" do
+      setup do
+        instance_eval(&block)
+      end
+      
+      should_respond_with 200
+
+      should "return an success XML document" do
+        assert_select 'success' do
+          updated_data.each do |object, fields|
+            assert_select("#{object}") do
+              fields.each do |field, value|
+                assert_select("#{field}", /#{value}/)
+              end
+            end
+          end
+        end
+      end
+
+      should "update the fields on the record" do
+        updated_data.each do |object, fields|
+          instance_object = instance_variable_get('@' + object.to_s)
+          assert instance_object
+          
+          instance_object.reload
+          fields.each do |field, value|
+            assert_equal value, instance_object.send(field.to_sym)
+          end
+        end
+      end
+
+    end
+  end
+
   def self.should_respond_with_a_server_error_xml_message(options={})
     context "" do
       should_respond_with 500
