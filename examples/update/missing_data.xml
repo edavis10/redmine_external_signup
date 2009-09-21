@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<errors>
+  <message>Missing a project or user id</message>
+
+  <project>
+    <missingData field="id">
+      id missing.  Use the integer id (e.g. 42) or the identifier (e.g. a-project)
+    </missingData>
+  </project>
+
+  <user>
+    <missingData field="id">id can't be empty</missingData>
+  </user>
+</errors>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<success>
+
+  <project>
+    <created-on type="datetime">2009-07-21T17:11:01-07:00</created-on>
+    <customer-id type="integer" nil="true"/>
+    <description>A Project description</description>
+    <homepage>http://exampless.com</homepage>
+    <id type="integer">1</id>
+    <identifier>roobprice0</identifier>
+    <is-public type="boolean">true</is-public>
+    <lft type="integer">7</lft>
+    <name>Open-source mobile open archit</name>
+    <parent-id type="integer" nil="true"/>
+    <rgt type="integer">12</rgt>
+    <status type="integer">1</status>
+    <total-value type="decimal" nil="true"/>
+    <updated-on type="datetime">2009-09-21T14:55:17-07:00</updated-on>
+  </project>
+
+  <user>
+    <admin type="boolean">false</admin>
+    <auth-source-id type="integer" nil="true"/>
+    <created-on type="datetime">2009-07-21T17:11:01-07:00</created-on>
+    <firstname>Test</firstname>
+    <hashed-password>51abb9636078defbf888d8457a7c76f85c8f114c</hashed-password>
+    <id type="integer">3</id>
+    <identity-url nil="true"/>
+    <language/>
+    <last-login-on type="datetime" nil="true"/>
+    <lastname>User</lastname>
+    <login>arlie</login>
+    <mail>reese_gulgowski@yahoo.com</mail>
+    <mail-notification type="boolean">false</mail-notification>
+    <status type="integer">1</status>
+    <updated-on type="datetime">2009-09-21T15:08:24-07:00</updated-on>
+  </user>
+</success>

@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<errors>
-  <project>
-    <missingData field="id">id missing.  Use the integer id (e.g. 42) or the identifier (e.g. a-project)</missingData>
-  </project>
-</errors>

@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<errors>
+  <error>The security key is invalid.  Please check that the key from Redmine is used in the 'security_key' parameter.</error>
+</errors>
