@@ -158,7 +158,11 @@ class ExternalSignupsControllerTest < ActionController::TestCase
               end
             end
 
-            should "not allow updating identifer"
+            should "not allow updating identifer" do
+              put :update, :security_key => @security_key, :project => {:id => @project.id, :identifier => 'an-update'}
+              @project.reload
+              assert_not_equal 'an-update', @project.identifier
+            end
 
           end
 
