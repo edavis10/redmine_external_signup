@@ -23,9 +23,14 @@ class ExternalSignupsController < ApplicationController
     roles = roles_setting.collect(&:to_s) unless roles_setting.blank?
     roles ||= []
 
-    @member = Member.new(:user => @user,
-                         :project => @project,
+    @member = Member.new(:project => @project,
                          :role_ids => roles)
+    # Redmine groups compatibility
+    if defined?(Principal)
+      @member.principal = @user
+    else
+      @member.user = @user
+    end
 
     call_hook(:plugin_external_signup_controller_external_signups_create_pre_validate,
               {

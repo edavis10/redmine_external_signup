@@ -180,8 +180,8 @@ class ExternalSignupsControllerTest < ActionController::TestCase
             end
 
             context "allow updating mail" do
-              should_respond_with_a_successful_xml_update_message(:user => {:mail => 'user2@example.com'}) do
-                put :update, :security_key => @security_key, :user => {:id => @user.id, :mail => 'user2@example.com'}
+              should_respond_with_a_successful_xml_update_message(:user => {:mail => 'email99@example.com'}) do
+                put :update, :security_key => @security_key, :user => {:id => @user.id, :mail => 'email99@example.com'}
               end
             end
           end
