@@ -65,7 +65,9 @@ class ExternalSignupsController < ApplicationController
   def update
     if (params[:project] && params[:project][:id]) || (params[:user] && params[:user][:id])
       respond_to do |format|
-        
+
+        project_saved, user_saved = true, true
+
         if params[:project] && params[:project][:id]
           @project = Project.find(params[:project][:id])
           project_saved = @project.update_attributes(params[:project])
@@ -76,8 +78,16 @@ class ExternalSignupsController < ApplicationController
           user_saved = @user.update_attributes(params[:user])
         end
 
-        format.xml { render :layout => false }
-        # TODO: error state
+        if project_saved && user_saved
+          format.xml { render :layout => false }
+        else
+          message = []
+          message << "Project not saved" unless project_saved
+          message << "User not saved" unless user_saved
+          @message = message.join(', ')
+
+          format.xml { render :status => 500, :layout => false, :action => 'missing_data'}
+        end
       end
     else
       @message = "Missing a project or user id"

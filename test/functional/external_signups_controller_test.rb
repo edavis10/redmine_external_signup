@@ -213,6 +213,36 @@ class ExternalSignupsControllerTest < ActionController::TestCase
 
           # Support data is added via a hook and is tested in the
           # redmine_project_support_hours plugin
+
+          context "but with a server error" do
+            context "on project" do
+              setup do
+                Project.any_instance.stubs(:update_attributes).returns(false)
+                put :update, {:security_key => @security_key, :project => {:id => @project.id, :name => 'Fail'}}
+              end
+
+              should_respond_with_a_server_error_xml_message(:message => 'Project not saved')
+            end
+
+            context "on user" do
+              setup do
+                User.any_instance.stubs(:update_attributes).returns(false)
+                put :update, {:security_key => @security_key, :user => {:id => @user.id, :name => 'Fail'}}
+              end
+
+              should_respond_with_a_server_error_xml_message(:message => 'User not saved')
+            end
+
+            context "on both project and user" do
+              setup do
+                Project.any_instance.stubs(:update_attributes).returns(false)
+                User.any_instance.stubs(:update_attributes).returns(false)
+                put :update, {:security_key => @security_key, :user => {:id => @user.id, :name => 'Fail'}, :project => {:id => @project.id, :name => 'Fail'}}
+              end
+
+              should_respond_with_a_server_error_xml_message(:message => 'Project not saved, User not saved')
+            end
+          end
         end
 
         context "with missing data" do

@@ -216,12 +216,14 @@ class Test::Unit::TestCase
   end
 
   def self.should_respond_with_a_server_error_xml_message(options={})
+    message = options.delete(:message) || 'ActiveRecord::RecordNotSaved'
+    
     context "" do
       should_respond_with 500
 
       should "return a server error XML document" do
         assert_select 'errors' do
-          assert_select('message', 'ActiveRecord::RecordNotSaved')
+          assert_select('message', message)
         end
       end
     end
