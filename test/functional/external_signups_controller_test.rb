@@ -182,6 +182,35 @@ class ExternalSignupsControllerTest < ActionController::TestCase
             end
           end
 
+          context "updates for both user and project" do
+            # TODO: would be nice to remove the duplication around
+            # this datastructure
+            should_respond_with_a_successful_xml_update_message({
+                                                                  :user => {
+                                                                    :firstname => 'Testing multiple',
+                                                                    :lastname => 'Testing multiple'
+                                                                  },
+                                                                  :project => {
+                                                                    :name => "A multi project",
+                                                                    :description => "Doing cool stuff"
+                                                                  }
+                                                                }) do
+              put(:update, {
+                    :security_key => @security_key,
+                    :user => {
+                      :id => @user.id,
+                      :firstname => 'Testing multiple',
+                      :lastname => 'Testing multiple'
+                    },
+                    :project => {
+                      :id => @project.id,
+                      :name => "A multi project",
+                      :description => "Doing cool stuff"
+                    }
+                  })
+            end
+          end
+
           # Support data is added via a hook and is tested in the
           # redmine_project_support_hours plugin
         end
