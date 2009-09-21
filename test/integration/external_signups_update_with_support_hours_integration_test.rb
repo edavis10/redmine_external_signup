@@ -2,26 +2,28 @@ require File.dirname(__FILE__) + '/../test_helper'
 
 if Redmine::Plugin.registered_plugins.keys.include?(:redmine_project_support_hours)
 
-  class ExternalSignupsCreateWithSupportHoursIntegrationTest < ActionController::IntegrationTest
+  class ExternalSignupsUpdateWithSupportHoursIntegrationTest < ActionController::IntegrationTest
     def send_request_with_support_hours
-      post "/external_signups/", {
+
+      put "/external_signups/", {
         :security_key => @security_key,
         :project => {
-          :name => "New integration project"
+          :id => @project.id,
+          :name => "Updated integration project"
         },
         :user => {
-          :firstname => 'Integration',
+          :id => @user.id,
+          :firstname => 'Updated user',
           :lastname => 'Test',
-          :mail => 'test@example.com',
-          :password => 'testing',
-          :password_confirmation => 'testing'
+          :mail => 'test@example.com'
         },
         :support => {
-          :hours => '100.2',
+          :hours => '1002.2',
           :start_date => '2009-09-01',
           :end_date => '2009-12-31'
         }
       }
+
     end
 
     context "with support hours" do
@@ -41,24 +43,41 @@ if Redmine::Plugin.registered_plugins.keys.include?(:redmine_project_support_hou
         # created before the assert_difference
         User.anonymous
         setup_plugin_configuration
+        @project = Project.generate!
+        @user = User.generate_with_protected!
+        @member = Member.generate!({
+                                     :role_ids => @configured_roles.collect(&:id),
+                                     :user => @user,
+                                     :project => @project
+                                   })
+
       end
       
-      should 'save hours' do
+      should 'update hours' do
         send_request_with_support_hours
-        project = Project.last
-        assert_equal '100.2', project.custom_value_for(@hours_custom_field).value
+
+        assert_response 200
+
+        @project.reload
+        assert_equal '1002.2', @project.custom_value_for(@hours_custom_field).value
       end
 
-      should 'save start date' do
+      should 'update start date' do
         send_request_with_support_hours
-        project = Project.last
-        assert_equal '2009-09-01', project.custom_value_for(@start_date_custom_field).value
+
+        assert_response 200
+
+        @project.reload
+        assert_equal '2009-09-01', @project.custom_value_for(@start_date_custom_field).value
       end
 
-      should 'save end date' do
+      should 'update end date' do
         send_request_with_support_hours
-        project = Project.last
-        assert_equal '2009-12-31', project.custom_value_for(@end_date_custom_field).value
+
+        assert_response 200
+
+        @project.reload
+        assert_equal '2009-12-31', @project.custom_value_for(@end_date_custom_field).value
       end
     end
   end

@@ -35,18 +35,27 @@ class ExternalSignupsUpdateIntegrationTest < ActionController::IntegrationTest
 
     should 'update a project' do
       send_request
+
+      assert_response 200
+
       @project.reload
       assert_equal "Updated integration project", @project.name
     end
 
     should 'update a user' do
       send_request
+
+      assert_response 200
+      
       @user.reload
       assert_equal "Updated user", @user.firstname
     end
 
     should 'return an xml message to the caller' do
       send_request
+
+      assert_response 200
+
       assert_equal 'application/xml', @response.content_type
     end
   end
