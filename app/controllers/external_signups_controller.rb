@@ -68,14 +68,14 @@ class ExternalSignupsController < ApplicationController
 
         project_saved, user_saved = true, true
 
-        if params[:project] && params[:project][:id]
+        if params[:project] && params[:project][:id].present?
           @project = Project.find(params[:project][:id])
-          project_saved = @project.update_attributes(params[:project])
+          project_saved = @project.update_attributes(params[:project].delete_if {|k,v| v.blank?})
         end
 
-        if params[:user] && params[:user][:id]
+        if params[:user] && params[:user][:id].present?
           @user = User.find(params[:user][:id])
-          user_saved = @user.update_attributes(params[:user])
+          user_saved = @user.update_attributes(params[:user].delete_if {|k,v| v.blank?})
         end
 
         call_hook(:plugin_external_signup_controller_external_signups_update,
