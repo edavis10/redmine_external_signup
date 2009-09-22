@@ -9,3 +9,5 @@ en:
   external_signup_security_key_label: "Security key"
   external_signup_security_key_generation_warning: "This will overwrite your existing security key and will require you to update all your external forms.  Continue?"
   external_signup_add_members_role_plural: "Users with the following Roles will be added to a new project automatically."
+  external_signup_label_default_assignee: "Default assignee"
+  external_signup_text_default_assignee_not_installed: "(not installed)"

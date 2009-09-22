@@ -21,6 +21,7 @@
     <% else %>
       <%= link_to(l(:external_signup_missing_roles), :controller => 'roles', :action => 'index') %>
    <% end %>
+  </p>
 </fieldset>
 
 <fieldset>
@@ -45,6 +46,28 @@
     <% else %>
       <%= link_to(l(:external_signup_missing_roles), :controller => 'roles', :action => 'index') %>
    <% end %>
+  </p>
+
+  <p>
+    <% default_user_assignment_installed = Redmine::Plugin.registered_plugins.keys.include?(:redmine_default_assign) %>
+    <%-
+    selected_default_user = @settings['default_user_assignment']
+     -%>
+    <%= content_tag(:label, l(:external_signup_label_default_assignee)) %>
+
+    <%= select_tag('settings[default_user_assignment]',
+                    content_tag(:option, '') + options_from_collection_for_select(User.all.sort, :id, :name, selected_default_user.to_i),
+                    :disabled => !default_user_assignment_installed) %>
+
+    <% unless default_user_assignment_installed %>
+    <span>
+      <a href="http://github.com/edavis10/redmine_default_assign">
+        <%= l(:external_signup_text_default_assignee_not_installed) %>
+      </a>
+    </span>
+    <% end %>
+  </p>
+
 </fieldset>
 
 <fieldset>
