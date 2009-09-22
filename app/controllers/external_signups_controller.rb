@@ -38,6 +38,7 @@ class ExternalSignupsController < ApplicationController
     @user.valid?
     @user.errors.add_on_blank([:password, :password_confirmation])
     @member.valid?
+    @additional_members.all? {|m| m.valid? }
     
     if @project.errors.length == 0 &&
         @user.errors.length == 0 &&
