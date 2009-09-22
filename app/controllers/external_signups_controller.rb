@@ -23,14 +23,8 @@ class ExternalSignupsController < ApplicationController
     roles = roles_setting.collect(&:to_s) unless roles_setting.blank?
     roles ||= []
 
-    @member = Member.new(:project => @project,
-                         :role_ids => roles)
-    # Redmine groups compatibility
-    if defined?(Principal)
-      @member.principal = @user
-    else
-      @member.user = @user
-    end
+    @member = add_member({:roles => roles, :project => @project, :user => @user})
+    @additional_members = add_additional_members(:project => @project)
 
     call_hook(:plugin_external_signup_controller_external_signups_create_pre_validate,
               {
@@ -45,7 +39,10 @@ class ExternalSignupsController < ApplicationController
     @user.errors.add_on_blank([:password, :password_confirmation])
     @member.valid?
     
-    if @project.errors.length == 0 && @user.errors.length == 0 && @member.errors.length == 0
+    if @project.errors.length == 0 &&
+        @user.errors.length == 0 &&
+        @member.errors.length == 0 &&
+        @additional_members.all? {|m| m.errors.length == 0 }
 
       respond_to do |format|
         begin
@@ -53,6 +50,7 @@ class ExternalSignupsController < ApplicationController
             @project.save!
             @user.save!
             @member.save!
+            @additional_members.each { |member| member.save! }
 
             format.xml { render :layout => false }
           end
@@ -158,4 +156,40 @@ class ExternalSignupsController < ApplicationController
     return settings['security_key'] && params[:security_key] && settings['security_key'].present? && settings['security_key'] == params[:security_key].to_s
   end
 
+  def add_member(attributes)
+    member = Member.new(:project => attributes[:project],
+                         :role_ids => attributes[:roles])
+    # Redmine groups compatibility
+    if defined?(Principal)
+      member.principal = attributes[:user]
+    else
+      member.user = attributes[:user]
+    end
+
+    member
+  end
+
+  def add_additional_members(attributes)
+    roles_setting = Setting.plugin_redmine_external_signup['roles_for_all_users']
+    role_ids = roles_setting.collect(&:to_s) unless roles_setting.blank?
+
+    unless role_ids.blank?
+
+      roles = Role.find(role_ids, :include => :members)
+      users_to_add = roles.collect(&:members).flatten.collect(&:user).uniq
+
+      returning [] do |members|
+        users_to_add.each do |user|
+          members << add_member(:user => user, :roles => role_ids, :project => attributes[:project])
+        end
+      end
+
+      
+    else
+      return []
+    end
+
+    
+
+  end
 end

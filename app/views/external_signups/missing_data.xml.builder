@@ -24,4 +24,15 @@ xml.errors do
       end
     end
   end
+  if @additional_members
+    @additional_members.each do |member|
+      if @member.errors.length > 0
+        xml.member do  
+          @member.errors.each do |attr, message|
+            xml.missingData(attr + ' ' + message, :field => attr)
+          end
+        end
+      end
+    end
+  end
 end

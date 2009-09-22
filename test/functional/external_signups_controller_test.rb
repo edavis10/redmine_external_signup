@@ -20,6 +20,27 @@ class ExternalSignupsControllerTest < ActionController::TestCase
       context "with a valid security key" do
         context "with valid data" do
           setup do
+            project = Project.generate!
+            user1 = User.generate_with_protected!
+            user2 = User.generate_with_protected!
+            user3 = User.generate_with_protected!
+            Member.generate!({
+                               :role_ids => @all_user_roles.collect(&:id),
+                               :user => user1,
+                               :project => project
+                             })
+            Member.generate!({
+                               :role_ids => @all_user_roles.collect(&:id),
+                               :user => user2,
+                               :project => project
+                             })
+            Member.generate!({
+                               :role_ids => @all_user_roles.collect(&:id),
+                               :user => user3,
+                               :project => project
+                             })
+
+            
             @user_attributes = {
               :firstname => "Test",
               :lastname => "User",
@@ -47,7 +68,7 @@ class ExternalSignupsControllerTest < ActionController::TestCase
 
           should_create_a_project({:name => "A test project"}) { post :create, @valid_data }
 
-          should_create_a_member { post :create, @valid_data }
+          should_create_members_for_the_new_user_and_additional_users({:count => 4}) { post :create, @valid_data }
           
           # Support data is added via a hook and is tested in the
           # redmine_project_support_hours plugin

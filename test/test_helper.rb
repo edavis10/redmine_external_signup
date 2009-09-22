@@ -31,8 +31,10 @@ class Test::Unit::TestCase
     @security_key = 'deadbeef1234'
 
     @configured_roles = [Role.generate!, Role.generate!]
+    @all_user_roles = [Role.generate!]
     configure_plugin({
                        'roles' => @configured_roles.collect(&:id).collect(&:to_s),
+                       'roles_for_all_users' => @all_user_roles.collect(&:id).collect(&:to_s),
                        'security_key' => @security_key
                      })
   end
@@ -127,17 +129,20 @@ class Test::Unit::TestCase
     end
   end
 
-  def self.should_create_a_member(&block)
+  def self.should_create_members_for_the_new_user_and_additional_users(options={}, &block)
+    count = options.delete(:count) || 1
+    
     context 'should create a member' do
       should 'be saved to the database' do
-        assert_difference 'Member.count', 1 do
+        assert_difference 'Member.count', count do
           instance_eval(&block)
         end
       end
 
       should 'use the created user account' do
         instance_eval(&block)
-        member = Member.last
+        members = Member.find(:all, :limit => count, :order => 'id desc')
+        member = members[-1] # first one in this set should be the user's
         user = User.last
 
         assert member, "No member created"
@@ -147,7 +152,8 @@ class Test::Unit::TestCase
 
       should 'assign each of the configured roles' do
         instance_eval(&block)
-        member = Member.last
+        members = Member.find(:all, :limit => count, :order => 'id desc')
+        member = members[-1] # first one in this set should be the user's
 
         assert member, "No member created"
         assert_equal 2, member.roles.length, "No roles assigned"
