@@ -31,14 +31,14 @@
     <%= content_tag(:label, l(:external_signup_add_members_role_plural)) %>
 
     <%-
-      selected_roles_for_all_users = @settings['roles'].collect(&:to_i) unless @settings['roles_for_all_users'].blank?
-      selected_roles_for_all_users ||= []
+      selected_roles_for_additional_users = @settings['roles_for_additional_users'].collect(&:to_i) unless @settings['roles_for_additional_users'].blank?
+      selected_roles_for_additional_users ||= []
     -%>
 
     <% unless roles.empty? %>
     <%=
-      select_tag("settings[roles_for_all_users]",
-                 content_tag(:option, '') + options_from_collection_for_select(roles, :id, :name, selected_roles_for_project ),
+      select_tag("settings[roles_for_additional_users]",
+                 content_tag(:option, '') + options_from_collection_for_select(roles, :id, :name, selected_roles_for_additional_users ),
                  :multiple => true,
                  :size => 5)
     %>

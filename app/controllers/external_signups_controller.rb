@@ -170,7 +170,7 @@ class ExternalSignupsController < ApplicationController
   end
 
   def add_additional_members(attributes)
-    roles_setting = Setting.plugin_redmine_external_signup['roles_for_all_users']
+    roles_setting = Setting.plugin_redmine_external_signup['roles_for_additional_users']
     role_ids = roles_setting.collect(&:to_s) unless roles_setting.blank?
 
     unless role_ids.blank?

@@ -31,10 +31,10 @@ class Test::Unit::TestCase
     @security_key = 'deadbeef1234'
 
     @configured_roles = [Role.generate!, Role.generate!]
-    @all_user_roles = [Role.generate!]
+    @roles_for_additional_users = [Role.generate!]
     configure_plugin({
                        'roles' => @configured_roles.collect(&:id).collect(&:to_s),
-                       'roles_for_all_users' => @all_user_roles.collect(&:id).collect(&:to_s),
+                       'roles_for_additional_users' => @roles_for_additional_users.collect(&:id).collect(&:to_s),
                        'security_key' => @security_key
                      })
   end

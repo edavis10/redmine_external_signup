@@ -25,17 +25,17 @@ class ExternalSignupsControllerTest < ActionController::TestCase
             user2 = User.generate_with_protected!
             user3 = User.generate_with_protected!
             Member.generate!({
-                               :role_ids => @all_user_roles.collect(&:id),
+                               :role_ids => @roles_for_additional_users.collect(&:id),
                                :user => user1,
                                :project => project
                              })
             Member.generate!({
-                               :role_ids => @all_user_roles.collect(&:id),
+                               :role_ids => @roles_for_additional_users.collect(&:id),
                                :user => user2,
                                :project => project
                              })
             Member.generate!({
-                               :role_ids => @all_user_roles.collect(&:id),
+                               :role_ids => @roles_for_additional_users.collect(&:id),
                                :user => user3,
                                :project => project
                              })
