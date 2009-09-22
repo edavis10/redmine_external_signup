@@ -1,8 +1,11 @@
 en:
   external_signup_text_settings_configuration: "User creation"
+  external_signup_text_settings_project_configuration: "Project creation"
   external_signup_text_settings_security: "Security"
   external_signup_settings_help: "When a new user is created from the external source, they will get the following settings:"
+  external_signup_settings_help_projects: "When a new project is created from the external source, it will get the following settings:"
   external_signup_settings_help_security: "The following security key must be used to authenticate your external script.  It can be regenerated using the link below at any time."
   external_signup_missing_roles: "Missing Roles.  Please create at least one first."
   external_signup_security_key_label: "Security key"
   external_signup_security_key_generation_warning: "This will overwrite your existing security key and will require you to update all your external forms.  Continue?"
+  external_signup_add_members_role_plural: "Users with the following Roles will be added to a new project automatically."

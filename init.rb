@@ -32,6 +32,7 @@ Redmine::Plugin.register :redmine_external_signup do
              :partial => 'settings/external_signup',
              :default => {
                'roles' => [],
+               'roles_for_all_users' => [],
                'security_key' => ''
              }})
 
