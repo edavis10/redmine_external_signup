@@ -31,15 +31,17 @@ class ExternalSignupsController < ApplicationController
                 :project => @project,
                 :user => @user,
                 :member => @member,
+                :additional_members => @additional_members,
                 :params => params
               })
+
     # Run validations so all errors are available to the view
     @project.valid?
     @user.valid?
     @user.errors.add_on_blank([:password, :password_confirmation])
     @member.valid?
     @additional_members.all? {|m| m.valid? }
-    
+
     if @project.errors.length == 0 &&
         @user.errors.length == 0 &&
         @member.errors.length == 0 &&

@@ -35,7 +35,8 @@ class Test::Unit::TestCase
     configure_plugin({
                        'roles' => @configured_roles.collect(&:id).collect(&:to_s),
                        'roles_for_additional_users' => @roles_for_additional_users.collect(&:id).collect(&:to_s),
-                       'security_key' => @security_key
+                       'security_key' => @security_key,
+                       'default_user_assignment' => ''
                      })
   end
 end
