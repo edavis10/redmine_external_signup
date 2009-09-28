@@ -28,6 +28,11 @@ class Test::Unit::TestCase
   end
 
   def setup_plugin_configuration
+    # Force Redmine to require login for every project.  This is the
+    # strictest security setting so we can be sure the security_key
+    # still works
+    Setting.login_required = true
+    
     @security_key = 'deadbeef1234'
 
     @configured_roles = [Role.generate!, Role.generate!]

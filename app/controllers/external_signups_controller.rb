@@ -191,8 +191,11 @@ class ExternalSignupsController < ApplicationController
     else
       return []
     end
+  end
 
-    
-
+  # Since the security_key is used to authenticate, bypass the default
+  # require_login method.
+  def require_login
+    true
   end
 end
